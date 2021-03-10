@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "Hello"
+    "start": "Hello, this is a test"
   },
   "author": "Thomas Kolasa",
   "license": "ISC"
