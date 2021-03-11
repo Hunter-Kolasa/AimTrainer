@@ -1,7 +1,7 @@
-const canvas = document.getElementById("game-window");
-const c = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+const canvas = () => document.getElementById("game-window");
+const c = () => canvas.getContext("2d");
+// canvas.width = innerWidth;
+// canvas.height = innerHeight;
 const userForm = document.forms["login-signup"];
 const loginBtn = document.getElementById("loginBtn");
 const targets = [];
@@ -47,7 +47,7 @@ function loadMainMenu() {
 }
 
 function userLoginOrSignup(user, p) {
-    console.log(`Login button pressed with username: ${user} and password: ${p}`)
+    console.log(`Login button pressed with username: ${user}`)
     return fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {
@@ -55,8 +55,7 @@ function userLoginOrSignup(user, p) {
             "Accept": "application/json"
         },
         body: JSON.stringify( {
-            username: user,
-            password_digest: p
+            username: user
         } )
     } )
         .then(function(response) {
@@ -66,20 +65,17 @@ function userLoginOrSignup(user, p) {
             userMenu(object)
         } )
         .catch(function(error) {
-            alert("Oofingest oof, something went wrong.")
+            alert("Something went wrong.")
             console.log(error.message)
         } )
 }
 
 function userMenu(user) {
-
+    
 }
 
 // listens for mousedown and starts target generating loop
 function startRound() {
-    function drawCanvas() {
-        
-    }
     window.addEventListener('mousedown', (mc) => {
         // clicks.push(new Click(mc.clientX, mc.clientY))
         targetHit(mc.clientX, mc.clientY);
@@ -146,7 +142,7 @@ function animate() {
     })
 };
 
-animate();
+// animate();
 
 
 

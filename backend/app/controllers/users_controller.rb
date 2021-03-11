@@ -1,9 +1,5 @@
 class UsersController < ApplicationController
 
-    def new
-        user = User.new
-    end
-
     def create
         # create user from params, render json response to be sent back to frontend
         # should user auth take place here or in js??
@@ -24,9 +20,6 @@ class UsersController < ApplicationController
         user = User.find_by(id: user_params[:id])
         # if authenticated/logged in, return user json to frontend
         render json: user
-    end
-
-    def edit
     end
 
     def destroy
