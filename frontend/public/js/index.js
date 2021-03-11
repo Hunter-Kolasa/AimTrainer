@@ -1,12 +1,13 @@
 const canvas = document.getElementById("game-window");
 const c = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 const userForm = document.forms["login-signup"];
 const loginBtn = document.getElementById("loginBtn");
 const targets = [];
 let score = 0;
 let missCounter = 0;
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+
 
 class Target {
     // build target from params
@@ -36,15 +37,14 @@ class Target {
 // do things after DOM is completely loaded
 // should be used to load main menu of game where users login/view stats/view leaderboard
 document.addEventListener("DOMContentLoaded", function() {
-    loginBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-        
-        const user = document.getElementById("username").value
-        const p = document.getElementById("password").value
-        userLoginOrSignup(user, p); 
-    })
+    loadMainMenu();
+    
     // startRound();
 });
+
+function loadMainMenu() {
+    
+}
 
 function userLoginOrSignup(user, p) {
     console.log(`Login button pressed with username: ${user} and password: ${p}`)
@@ -63,7 +63,7 @@ function userLoginOrSignup(user, p) {
             return response.json()
         } )
         .then(function(object) {
-            console.log(object)
+            userMenu(object)
         } )
         .catch(function(error) {
             alert("Oofingest oof, something went wrong.")
@@ -71,8 +71,15 @@ function userLoginOrSignup(user, p) {
         } )
 }
 
+function userMenu(user) {
+
+}
+
 // listens for mousedown and starts target generating loop
 function startRound() {
+    function drawCanvas() {
+        
+    }
     window.addEventListener('mousedown', (mc) => {
         // clicks.push(new Click(mc.clientX, mc.clientY))
         targetHit(mc.clientX, mc.clientY);

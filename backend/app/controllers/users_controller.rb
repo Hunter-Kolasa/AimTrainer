@@ -13,7 +13,7 @@ class UsersController < ApplicationController
         user = User.new(user_params)
         
         if user.save
-            render json: user, except: [:password_digest, :created_at, :updated_at]
+            render json: user, only: [:username, :game_ids, :created_at, :updated_at]
         else
             render json: {message: "You made it to the userController create method before erroring"}
         end
