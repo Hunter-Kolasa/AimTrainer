@@ -1,13 +1,19 @@
-const canvas = () => document.getElementById("game-window");
-const c = () => canvas.getContext("2d");
-// canvas.width = innerWidth;
-// canvas.height = innerHeight;
+const BASE_URL = "http://localhost:3000/";
+const canvasDiv = document.querySelector(".canvas")
+const canvas = document.createElement("canvas");
+canvas.hidden = true
+canvas.height = innerHeight;
+canvas.width = innerWidth;
+canvasDiv.appendChild(canvas)
+const c = canvas.getContext("2d");
+const errorDiv = document.querySelector(".alert");
 const userForm = document.forms["login-signup"];
 const loginBtn = document.getElementById("loginBtn");
 const targets = [];
 let score = 0;
 let missCounter = 0;
-
+let stop = 0
+// const clicks = [];
 
 class Target {
     // build target from params
@@ -15,7 +21,8 @@ class Target {
         this.radius = radius
         this.x = x
         this.y = y
-        this.color = getRandomColor()  
+        this.color = getRandomColor() 
+        
     }
 
     // draw target on canvas
@@ -25,7 +32,6 @@ class Target {
         c.closePath
         c.fillStyle = this.color
         c.fill()
-        
     }
 
     // update canvas with locations (or lack of) of targets
@@ -38,17 +44,49 @@ class Target {
 // should be used to load main menu of game where users login/view stats/view leaderboard
 document.addEventListener("DOMContentLoaded", function() {
     loadMainMenu();
+    loginBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value
+        userLoginOrSignup(username);
+    })
     
     // startRound();
 });
 
 function loadMainMenu() {
-    
+    fetchGames();
+} 
+
+function fetchGames() {
+    return fetch(BASE_URL + "games")
+        .then(response => {
+            return response.json()
+        })
+        .then(object => {
+            console.log(object)
+            populateLeaderboard(object);
+        })
+        .catch(error => {
+            let note = "There are no scores yet!"
+            renderError(error, note);
+        } )
 }
 
-function userLoginOrSignup(user, p) {
+function renderError(er, note) {
+    let erP = document.createElement("p");
+    erP.innerHTML = note;
+    errorDiv.appendChild(erP);
+    console.log(er)
+}
+
+function populateLeaderboard(games) {
+    // builds and populates leaderboard to display on Main Menu
+}
+
+
+function userLoginOrSignup(user) {
     console.log(`Login button pressed with username: ${user}`)
-    return fetch("http://localhost:3000/users", {
+    return fetch(BASE_URL + "users", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -71,16 +109,35 @@ function userLoginOrSignup(user, p) {
 }
 
 function userMenu(user) {
+    const startBtnDiv = document.querySelector(".start-game-btn")
+    const startBtn = document.createElement("button")
+    startBtn.setAttribute('class', 'startBtn')
+    startBtn.innerText = "Start Round"
+    startBtnDiv.appendChild(startBtn)
+    startBtn.addEventListener('click', () => {
+        userForm.hidden = true
+        startBtn.hidden = true
+        startRound();
+    })
     
 }
 
+// function buildCanvas() {
+//     // build canvas and set to global canvas and context(c) variables
+//     canvas(); 
+//     canvas.width = innerWidth;
+//     canvas.height = innerHeight;
+//     canvasDiv.appendChild(canvas)
+// }
+
 // listens for mousedown and starts target generating loop
 function startRound() {
+    canvas.hidden = false
     window.addEventListener('mousedown', (mc) => {
         // clicks.push(new Click(mc.clientX, mc.clientY))
         targetHit(mc.clientX, mc.clientY);
     })
-    setInterval(addTarget, 500)
+    addTargets();
 };
 
 // random color generator, can be refactored into single but super confusing line
@@ -94,8 +151,9 @@ function getRandomColor() {
 };
 
 // generates random target params within limits and adds to targets array
-function addTarget() {
-    const radius = Math.random() * (30 - 12) + 12
+function addTargets() {
+    setInterval(() => {
+        let radius = Math.random() * (30 - 12) + 12
     let x = Math.random() * (canvas.width)
     let y = Math.random() * (canvas.height)
     while(x < (canvas.width / 10) || x > 9 * (canvas.width / 10)) {
@@ -105,6 +163,8 @@ function addTarget() {
         y = Math.random() * (canvas.height)
     }
     targets.push(new Target(x, y, radius))
+    }, 500)
+    
 };
 
 // checks if mousedown coordinates are within any target radii
@@ -125,13 +185,21 @@ function targetHit(x, y) {
     }
 };
 
-// insert cool animation for target hit here
-function hitSpray(targetHit) {
 
+function hitSpray(targetHit) {
+    // insert cool animation for target hit here
 };
 
+function endGame() {
+    // displays end screen, calls submitScore() and gives option to start again or return to main menu
+}
+
+function submitScore() {
+    // sends fetch() post back to API
+}
+
 // frame request loop that updates targets every frame
-function animate() {
+function animate(stop = 0) {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     // clicks.forEach((click) => {
@@ -140,18 +208,19 @@ function animate() {
     targets.forEach((target) => {
         target.update();
     })
+    if (targets.length > 30) {
+
+    }
+    //***** */ if stop = 0 *****
 };
 
-// animate();
+animate();
 
 
 
-// const clicks = [];
 
-// helper function for checking if mosue coords inside target radius
-// function insideTarget(mX, mY, tX, tY, tR) {
-//     Math.sqrt((mX-tX)*(mX-tX) + (mY-tY)*(mY-tY)) <= tR ? true : false
-// }
+
+
 
 // const myGameArea = {
 //     canvas: document.createElement("canvas"),
@@ -175,9 +244,9 @@ function animate() {
 // class Click {
 //     constructor(x, y) {
 //         this.radius = 2
-//         this.x = x - 8
-//         this.y = y - 8
-//         this.color = "#000000"  
+//         this.x = x
+//         this.y = y
+//         this.color = "white"  
 //     }
 
 //     draw() {

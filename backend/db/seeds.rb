@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+    user = User.create(username: 'JohnnyBread')
+    user.games.build(score: 20)
+    user.games.build(score: 50)
+    user2 = User.create(username: 'HerbertEButts')
+    user2.games.build(score: 10)
+    user2.games.build(score: 125)

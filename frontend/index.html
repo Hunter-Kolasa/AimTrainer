@@ -6,15 +6,25 @@
     <link rel="stylesheet" href="./public/stylesheets/main.css">
   </head>
   <body>
-    <div id="signin">
-      <form name="login-signup">
+
+    <div class="signin">
+      <form name="login-signup" id="login-signup">
         <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" id="username" required>
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" id="password" required>
-        <input type="hidden" placeholder="Confirm Password" id="password-confirm" required>
-        <button type="submit" id="loginBtn">Login or Signup</button>
+        <input type="text" placeholder="Username" id="username" required>
+        <button type="submit" id="loginBtn">Enter</button>
       </form>
     </div>
-      <script src="./public/js/index.js" charset="utf-8"></script>
+
+    <div class="welcome-user"></div>
+
+    <div class="start-game-btn"></div>
+
+    <div class="alert"></div>
+
+    <div class="canvas"></div>
+
+    <div class="end-menu"></div>
+
+    <script src="./public/js/index.js" charset="utf-8"></script>
   </body>
+  </html>
