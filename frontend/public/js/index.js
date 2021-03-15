@@ -47,6 +47,7 @@ let targets = [];
 let score = 0;
 let missCounter = 0;
 let stop = 0
+let userId = ""
 
 // const clicks = [];
 
@@ -137,6 +138,7 @@ function userLoginOrSignup(user) {
         .then(function(object) {
             userForm.hidden = true
             userMenu(object.username)
+            userId = object.id
         } )
         .catch(function(error) {
             alert("Something went wrong.")
@@ -177,6 +179,7 @@ function userMenu(username) {
 // listens for mousedown and starts target generating loop
 function startRound() {
     reset();
+    stop = 0
     scorecardH3.hidden = false
     scorecardH3.innerHTML = score
     replayBtn.hidden = true;
@@ -210,8 +213,7 @@ function getRandomColor() {
 
 // generates random target params within limits and adds to targets array
 function addTargets() {
-    stop = 0
-    let targetInterval = setInterval(() => {
+    let targetInterval = setInterval(function() {
     if (targets.length > 29) {
         let state = "loss"
         endGame(state)
@@ -227,6 +229,7 @@ function addTargets() {
     }
     targets.push(new Target(x, y, radius))
     if (stop === 1) {
+        
         clearInterval(targetInterval)        
     }
     }, 500)
@@ -256,7 +259,7 @@ function targetHit(x, y) {
             }
         } else {
             stop = 1
-            submitScore(usernameH4.value, score);
+            submitScore(userId, score);
         }
     }
 };
@@ -266,17 +269,17 @@ function hitSpray(targetHit) {
     // insert cool animation for target hit here
 };
 
-function submitScore(user, score) {
-    console.log(`Game submitting with username: ${user} and score: ${score}.`)
-    return fetch(BASE_URL + "games", {
-        method: "POST",
+function submitScore(userId, score) {
+    console.log(`Game submitting with id: ${userId} and score: ${score}.`)
+    return fetch(BASE_URL + `users/${userId}`, {
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
         body: JSON.stringify( {
-            username: user,
-            game: score
+            id: userId,
+            score: score
         } )
     } )
         .then(function(response) {
@@ -308,7 +311,7 @@ function endGame(state, score) {
         startRound();
     })
     mainMenuBtn.addEventListener("click", function() {
-        userMenu(usernameH4.value);
+        userMenu(usernameH4.innerHTML);
     })
 
 }

@@ -8,9 +8,9 @@ class UsersController < ApplicationController
         if user = User.find_or_create_by(username: user_params[:username])
             games = user.games
             if games.any?
-                render json: {username: user.username, games: games}
+                render json: {username: user.username, id: user.id, games: games}
             else
-                render json: {username: user.username}
+                render json: {username: user.username, id: user.id}
             end
         else
             render json: {message: "Something happened in UsersController#create"}
@@ -25,6 +25,15 @@ class UsersController < ApplicationController
         # render json: user
     end
 
+    def update
+        user = User.find_by(id: user_params[:id])
+        
+        game = user.games.new
+        game.score = params[:score]
+        game.save
+        render json: {user: user, game: game}
+    end
+
     def destroy
     end
 
@@ -33,7 +42,7 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:username, games_attributes: [:id, :score])
+        params.require(:user).permit(:id, :username)
     end
 
 
