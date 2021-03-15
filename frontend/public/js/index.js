@@ -43,7 +43,7 @@ const BASE_URL = "http://localhost:3000/";
     endMenuDiv.appendChild(replayBtn);
     endMenuDiv.appendChild(mainMenuBtn);
 // 
-const targets = [];
+let targets = [];
 let score = 0;
 let missCounter = 0;
 let stop = 0
@@ -145,6 +145,10 @@ function userLoginOrSignup(user) {
 }
 
 function userMenu(username) {
+    reset();
+    replayBtn.hidden = true;
+    mainMenuBtn.hidden = true;
+    endMessageP.hidden = true;
     scorecardH3.hidden = true
     usernameH4.hidden = true
     userForm.hidden = true
@@ -172,7 +176,7 @@ function userMenu(username) {
 
 // listens for mousedown and starts target generating loop
 function startRound() {
-    score = 0
+    reset();
     scorecardH3.hidden = false
     scorecardH3.innerHTML = score
     replayBtn.hidden = true;
@@ -187,6 +191,13 @@ function startRound() {
     addTargets();
 };
 
+function reset() {
+    missCounter = 0
+    score = 0
+    stop = 1
+    targets = []
+}
+
 // random color generator, can be refactored into single but super confusing line
 function getRandomColor() {
     let letters = '0123456789ABCDEF';
@@ -199,12 +210,13 @@ function getRandomColor() {
 
 // generates random target params within limits and adds to targets array
 function addTargets() {
+    stop = 0
+    let targetInterval = setInterval(() => {
     if (targets.length > 29) {
-            let state = "loss"
-            endGame(state)
-        }
-    setInterval(() => {
-        let radius = Math.random() * (30 - 12) + 12
+        let state = "loss"
+        endGame(state)
+    }
+    let radius = Math.random() * (30 - 12) + 12
     let x = Math.random() * (canvas.width)
     let y = Math.random() * (canvas.height)
     while(x < (canvas.width / 10) || x > 9 * (canvas.width / 10)) {
@@ -214,6 +226,9 @@ function addTargets() {
         y = Math.random() * (canvas.height)
     }
     targets.push(new Target(x, y, radius))
+    if (stop === 1) {
+        clearInterval(targetInterval)        
+    }
     }, 500)
     
 };
@@ -223,7 +238,6 @@ function addTargets() {
 // if score doesn't go up, registers as miss, adds to missCounter
 function targetHit(x, y) {
     priorScore = score
-    let user = usernameH4.value
     targets.forEach(t => {
         if (Math.sqrt((x-t.x)*(x-t.x) + (y-t.y)*(y-t.y)) <= t.radius) {
             targets.splice(targets.indexOf(t), 1)
@@ -241,7 +255,8 @@ function targetHit(x, y) {
                 scorecardH3.innerHTML = --score
             }
         } else {
-            submitScore(user, score);
+            stop = 1
+            submitScore(usernameH4.value, score);
         }
     }
 };
