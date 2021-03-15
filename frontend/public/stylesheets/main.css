@@ -7,9 +7,13 @@ body {
     margin: 0px;
 }
 
-div#signin {
+div.signin {
     text-align: center;
     vertical-align: middle;
+}
+
+div.scorecard {
+    position: absolute;
 }
 
 
