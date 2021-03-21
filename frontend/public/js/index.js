@@ -46,7 +46,7 @@ const BASE_URL = "http://localhost:3000/";
 let targets = [];
 let score = 0;
 let missCounter = 0;
-let stop = 0
+let stop = false
 let userId = ""
 
 // const clicks = [];
@@ -179,7 +179,7 @@ function userMenu(username) {
 // listens for mousedown and starts target generating loop
 function startRound() {
     reset();
-    stop = 0
+    stop = false
     scorecardH3.hidden = false
     scorecardH3.innerHTML = score
     replayBtn.hidden = true;
@@ -197,7 +197,7 @@ function startRound() {
 function reset() {
     missCounter = 0
     score = 0
-    stop = 1
+    stop = true
     targets = []
 }
 
@@ -213,7 +213,14 @@ function getRandomColor() {
 
 // generates random target params within limits and adds to targets array
 function addTargets() {
-    let targetInterval = setInterval(function() {
+    let targetInterval = setInterval(targetDraw, 500)
+    
+};
+
+function targetDraw() {
+    if (stop === true) {
+        clearInterval(targetInterval)        
+    }    
     if (targets.length > 29) {
         let state = "loss"
         endGame(state)
@@ -227,14 +234,8 @@ function addTargets() {
     while(y < (canvas.height / 8) || y > 7 * (canvas.height / 8)) {
         y = Math.random() * (canvas.height)
     }
-    targets.push(new Target(x, y, radius))
-    if (stop === 1) {
-        
-        clearInterval(targetInterval)        
-    }
-    }, 500)
-    
-};
+    targets.push(new Target(x, y, radius))   
+}
 
 // checks if mousedown coordinates are within any target radii
 // if within -> removes target from array, adds to score, **needs to have cool animation**
@@ -258,7 +259,7 @@ function targetHit(x, y) {
                 scorecardH3.innerHTML = --score
             }
         } else {
-            stop = 1
+            stop = true
             submitScore(userId, score);
         }
     }
@@ -320,7 +321,7 @@ function endGame(state, score) {
 
 // frame request loop that updates targets every frame
 function animate() {
-    // while (stop === 0) {
+    // while (stop === false) {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     // clicks.forEach((click) => {
