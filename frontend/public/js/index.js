@@ -173,9 +173,8 @@ function userLoginOrSignup(user) {
       userId = object.id
       userMenu(object);
     })
-    .catch(function (error) {
-      alert("Something went wrong.");
-      console.log(error.message);
+    .catch(function () {
+      alert("You need to enter a username!");
     });
 }
 

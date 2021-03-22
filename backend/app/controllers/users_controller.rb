@@ -5,15 +5,16 @@ class UsersController < ApplicationController
         # no user auth, anybody can login with any username
         # when js posts user sign up data how/what is returned??
         # ---->JSON.stringify needs to POST a dataset matching user_params
-        if user = User.find_or_create_by(username: user_params[:username])
+        
+        user = User.find_or_create_by(username: user_params[:username])
+        
+        if user.save
             games = user.games
             if games.any?
                 render json: {username: user.username, id: user.id, games: games}
             else
                 render json: {username: user.username, id: user.id}
             end
-        else
-            render json: {message: "You need a username!"}
         end
     end
 
