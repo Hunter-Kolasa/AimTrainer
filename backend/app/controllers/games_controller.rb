@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
     def index
-        games = Game.all
+        games = Game.order(score: :desc).limit(15)
         
         render json: games
     end

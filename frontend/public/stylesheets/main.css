@@ -16,6 +16,11 @@ div.scorecard {
     position: absolute;
 }
 
+div.end-menu {
+    text-align: center;
+    vertical-align: middle;
+}
+
 
 /* form#login_signup {
     

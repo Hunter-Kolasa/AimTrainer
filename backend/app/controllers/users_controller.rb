@@ -30,8 +30,10 @@ class UsersController < ApplicationController
         
         game = user.games.new
         game.score = params[:score]
-        game.save
-        render json: {user: user, game: game}
+        if game.score != nil && game.score > 0 
+            game.save
+            render json: {user: user, game: game}
+        end
     end
 
     def destroy
