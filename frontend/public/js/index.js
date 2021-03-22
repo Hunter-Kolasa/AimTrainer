@@ -49,8 +49,9 @@ let targets = [];
 let score = 0;
 let missCounter = 0;
 let state;
-let userId = "";
+let userId;
 let targetInterval;
+let priorScore;
 // const clicks = [];
 
 class Target {
@@ -80,7 +81,6 @@ class Target {
 // do things after DOM is completely loaded
 // should be used to load main menu of game where users login/view stats/view leaderboard
 document.addEventListener("DOMContentLoaded", function () {
-  setToHidden([canvas, replayBtn, mainMenuBtn]);
   loadMainMenu();
   loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -88,14 +88,21 @@ document.addEventListener("DOMContentLoaded", function () {
     usernameH4.innerHTML = username;
     userLoginOrSignup(username);
   });
-  startBtn.addEventListener("click", () => {
+  startBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     startRound();
   });
-  replayBtn.addEventListener("click", function () {
+  replayBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     startRound();
   });
-  mainMenuBtn.addEventListener("click", function () {
+  mainMenuBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     userMenu(usernameH4.innerHTML);
+  });
+  canvas.addEventListener("mousedown", (mc) => {
+    // clicks.push(new Click(mc.clientX, mc.clientY))
+    targetHit(mc.clientX, mc.clientY);
   });
 
   // startRound();
@@ -109,7 +116,7 @@ function toggleElements(elementArray) {
 }
 
 function loadMainMenu() {
-  toggleElements([canvas, replayBtn, mainMenuBtn]);
+  setToHidden([canvas, replayBtn, mainMenuBtn]);
   fetchGames();
 }
 
@@ -136,9 +143,6 @@ function renderError(er, note) {
 }
 
 function populateLeaderboard(games) {
-  // builds and populates leaderboard to display on Main Menu
-  //   console.log(games)
-
   const leaderH2 = document.createElement("h2");
   leaderH2.innerHTML = "Leaderboard";
   leaderDiv.appendChild(leaderH2);
@@ -166,6 +170,7 @@ function userLoginOrSignup(user) {
     })
     .then(function (object) {
       // console.log(object)
+      userId = object.id
       userMenu(object);
     })
     .catch(function (error) {
@@ -175,9 +180,10 @@ function userLoginOrSignup(user) {
 }
 
 function userMenu(user) {
-  //   reset();
-  toggleElements([leaderDiv, userForm, usernameH4]);
-  userId = user.id;
+  reset();
+  setToHidden([userForm, usernameH4, replayBtn, mainMenuBtn, endMessageP, scorecardH3]);
+//   sets global userId for use when submitting score at end of game
+  
   startBtn.setAttribute("class", "startBtn");
   startBtn.innerText = "Start Round";
   startBtnDiv.appendChild(startBtn);
@@ -194,26 +200,25 @@ function userMenu(user) {
 
 // listens for mousedown and starts target generating loop
 function startRound() {
-  //   reset();
-  //   stop = false;
-  toggleElements([startBtn]);
+  reset();
+  setToHidden([startBtn]);
   scorecardH3.hidden = false;
   scorecardH3.innerHTML = score;
 
   usernameH4.hidden = false;
   canvas.hidden = false;
-  window.addEventListener("mousedown", (mc) => {
-    // clicks.push(new Click(mc.clientX, mc.clientY))
-    targetHit(mc.clientX, mc.clientY);
-  });
-  targetInterval = setInterval(addTargets, 500);
+  
+  targetInterval = setInterval(addTargets, 2000);
 }
 
 function reset() {
   console.log("Resetting..");
+  
+  leaderDiv.innerHTML = ""
   clearInterval(targetInterval);
   missCounter = 0;
   score = 0;
+  priorScore = 0;
   targets = [];
 }
 
@@ -257,14 +262,17 @@ function targetDraw() {
 // if within -> removes target from array, adds to score, **needs to have cool animation**
 // if score doesn't go up, registers as miss, adds to missCounter
 function targetHit(x, y) {
-  let priorScore = score;
+  priorScore = score;  
+  
   targets.forEach((t) => {
     if (Math.sqrt((x - t.x) * (x - t.x) + (y - t.y) * (y - t.y)) <= t.radius) {
       targets.splice(targets.indexOf(t), 1);
       scorecardH3.innerHTML = ++score;
-    //   hitSpray(t);
+      //   hitSpray(t);
     }
   });
+  console.log("prior score: " + priorScore)
+  console.log("Score: " + score)
   if (priorScore === score) {
     missCounter++;
     if (missCounter < 5) {
@@ -275,17 +283,19 @@ function targetHit(x, y) {
         scorecardH3.innerHTML = --score;
       }
     } else {
-      submitScore(userId, score);
+      submitScore(score);
     }
   }
+  console.log(missCounter)
+  
 }
 
 function hitSpray(targetHit) {
   // insert cool animation for target hit here
 }
 
-function submitScore(userId, score) {
-  // console.log(`Game submitting with id: ${userId} and score: ${score}.`)
+function submitScore(score) {
+  console.log(`Game submitting with id: ${userId} and score: ${score}.`)
   return fetch(BASE_URL + `users/${userId}`, {
     method: "PATCH",
     headers: {
@@ -306,7 +316,8 @@ function submitScore(userId, score) {
       endGame(state, object);
     })
     .catch(function (error) {
-      alert("Something went wrong while submitting score");
+      state = "loss";
+      endGame(state);
       // console.log(error.message)
     });
 }

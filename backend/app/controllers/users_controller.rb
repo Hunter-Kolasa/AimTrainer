@@ -13,7 +13,7 @@ class UsersController < ApplicationController
                 render json: {username: user.username, id: user.id}
             end
         else
-            render json: {message: "Something happened in UsersController#create"}
+            render json: {message: "You need a username!"}
         end
     end
 
