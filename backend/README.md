@@ -1,24 +1,24 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Welcome to Aim Trainer!
 
-Things you may want to cover:
+    This full-stack application uses a Rails API as its backend and combines JavaScript, HTML and CSS in its frontend.  With this app, a user is able to sign in/up with a username before beginning a game that tests your hand-eye coordination against a moving background.
+    **** WARNING: May cause minor motion sickness. ****
 
-* Ruby version
+# Setup
 
-* System dependencies
+    To begin, navigate to the backend from the project directory, install any necessary gems and start the Rails server via:
 
-* Configuration
+        - cd backend
+        - bundle install
+        - rails s
+    
+    Then, open index.html from the frontend directory and begin!
 
-* Database creation
+# Instructions
 
-* Database initialization
+    Click targets that appear at an increasing rate until you 1) miss a target 5 times or 2) allow 30 targets to populate the screen at any given time.  The ONLY way you can actually lose is by not hitting any targets. 
 
-* How to run the test suite
+    Good luck and have fun! Thank you for using Aim Trainer!
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
-
-* ...
