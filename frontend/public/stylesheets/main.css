@@ -21,9 +21,155 @@ div.end-menu {
     vertical-align: middle;
 }
 
+div.start-game-btn {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 45%;
+    transform: translateY(500px)
+}
+
+div.leaderboard {
+    position: fixed;
+    float: left;
+    top: 100px;
+    text-align: center;
+    box-shadow: 5px 8px rgba(0, 0, 0, 0.116);
+    background-color: rgba(175, 126, 126, 0.596);
+    border-radius: 16px;
+    width: 250px;
+    padding: 10px;
+    transform: translate(100px, -100px);
+}
+
+div.alert {
+    position: fixed;
+    transform: translateY(100px);
+}
+
+p.leaderboard-score {
+    background-color: rgba(44, 7, 1, 0.377);
+    border-style: solid;
+    border-radius: 6px;
+    border-width: thin;
+    padding: 3px;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300);
+ .signin {
+	 width: 400px;
+	 margin: 0 auto;
+	 font-family: Lato;
+	 font-size: 1.4em;
+}
+ .signin input {
+	 width: 400px;
+	 height: 80px;
+	 margin-top: 80px;
+	 font-family: Lato;
+	 font-size: 1.8em;
+	 background-color: transparent;
+	 border: none;
+	 border-top: 3px solid #4ea5d9;
+	 border-bottom: 3px solid #4ea5d9;
+	 outline: none;
+	 color: #201d1d;
+	 padding-left: 10px;
+}
+ .signin input:focus + label {
+	 top: -130px;
+	 font-size: 1.2em;
+	 transition: all 0.3s;
+}
+ .signin label {
+	 display: block;
+	 position: absolute;
+	 left: 10px;
+	 top: -70px;
+	 font-size: 1.8em;
+	 cursor: text;
+	 color: #44cfcb;
+	 transition: all 0.3s;
+}
+button {
+    animation:bouncy 5s infinite linear;
+    position:relative;
+    box-shadow: 0px 10px 14px -7px #276873;
+    background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+    background-color:#599bb3;
+    border-radius:8px;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:20px;
+    font-weight:bold;
+    padding:13px 32px;
+    text-shadow:0px 1px 0px #3d768a;
+    }
+    @keyframes bouncy {
+    0%{top:0em}
+    40%{top:0em}
+    43%{top:-0.9em}
+    46%{top:0em}
+    48%{top:-0.4em}
+    50%{top:0em}
+    100%{top:0em;}
+    }
+    button:hover {
+        background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+        background-color:#408c99;
+    }
+    button:active {
+        position:relative;
+        top:1px;
+    }
+    
+#loginBtn {
+    transform: translateY(20px);
+}
 
 /* form#login_signup {
     
 } */
 
+html {
+    height:100%;
+    width:100%;
+  }
+  
+  body {
+    margin:0;
+  }
+  
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+  
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+  
+  .bg3 {
+    animation-duration:5s;
+  }
+  
+  
+  
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+  }
  

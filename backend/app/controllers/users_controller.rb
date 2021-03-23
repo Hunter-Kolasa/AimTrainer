@@ -9,7 +9,9 @@ class UsersController < ApplicationController
         user = User.find_or_create_by(username: user_params[:username])
         
         if user.save
-            games = user.games
+            games = user.games.order(score: :desc).limit(5)
+            # high_score = user.games.order(score: :desc).limit(1)
+            
             if games.any?
                 render json: {username: user.username, id: user.id, games: games}
             else
