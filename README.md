@@ -1,5 +1,8 @@
 # README
 
+--[DEMO]--
+https://youtu.be/yAubDM2Z76I
+
 # Welcome to Aim Trainer!
 
     This full-stack application uses a Rails API as its backend and combines JavaScript, HTML and CSS in its frontend.  With this app, a user is able to sign in/up with a username before beginning a game that tests your hand-eye coordination against a moving background.
