@@ -34,16 +34,17 @@
       userLoginOrSignup(username);
     });
     startBtn.addEventListener("click", (e) => {
-      e.preventDefault();
+      // e.preventDefault();
       startRound();
     });
     replayBtn.addEventListener("click", function (e) {
-      e.preventDefault();
+      // e.preventDefault();
       startRound();
     });
     mainMenuBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      userLoginOrSignup(usernameH4.innerHTML);
+      // e.preventDefault();
+      // userLoginOrSignup(usernameH4.innerHTML);
+      userMenu(currentUser);
     });
     canvas.addEventListener("mousedown", (mc) => {
       targetHit(mc.clientX, mc.clientY);
@@ -88,6 +89,8 @@
       })
       .then(function (object) {
         userId = object.id
+        // currentUser = object
+        console.log(object)
         userMenu(object);
       })
       .catch(function (error) {
@@ -114,6 +117,8 @@
       })
       .then(function (object) {
         state = "win";
+        console.log(object);
+        currentUser = object
         endGame(state, object);
       })
       .catch(function (error) {
@@ -145,7 +150,7 @@
     leaderH2.innerHTML = "Your Top Scores";
     populateLeaderboard(user.games);
     setToHidden([userForm, usernameH4, replayBtn, mainMenuBtn, endMessageP, scorecardH3]);
-    setToVisible([startBtn])
+    setToVisible([startBtn, leaderDiv]);
   }
 
   // listens for mousedown and starts target generating loop
@@ -153,7 +158,7 @@
     reset();
     scorecardH3.innerHTML = score;
     setToHidden([leaderDiv, startBtn, errorDiv]);
-    setToVisible([scorecardH3, usernameH4, canvas])
+    setToVisible([scorecardH3, usernameH4, canvas]);
     targetInterval = setTimeout(addTargets, interval);
   }
 
@@ -231,6 +236,8 @@
     c.clearRect(0, 0, canvas.width, canvas.height);
     targets.forEach((target) => {
       target.update();
+      // const updateFn = target.update
+      // updateFn()
     });
   }
 

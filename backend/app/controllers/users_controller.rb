@@ -35,7 +35,8 @@ class UsersController < ApplicationController
         game.score = params[:score]
         if game.score != nil && game.score > 0 
             game.save
-            render json: {user: user, game: game}
+            games = user.games.order(score: :desc).limit(5)
+            render json: {user: user, game: game, games: games}
         end
     end
 

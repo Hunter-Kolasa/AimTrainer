@@ -38,6 +38,7 @@
     let targetInterval;
     let priorScore;
     let interval = 1000;
+    let currentUser;
     // 
 // ====================================================== //
 
